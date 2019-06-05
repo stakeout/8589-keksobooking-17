@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Вадим Новаш](https://up.htmlacademy.ru/javascript/17/user/8589).
-* Наставник: `Неизвестно`.
+* Наставник: [Сам себе Герой](https://up.htmlacademy.ru/javascript/17/user/8589).
 
 ---
 
