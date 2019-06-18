@@ -48,11 +48,13 @@ var renderAllPins = function (arrayOfPins) {
 
 // renderAllPins(getArrayOfPinObjects(arrayCount));
 
-document.querySelector('.map').classList.remove('map--faded');
 
 // module4-task1
-var filterForm = document.querySelector('.map__filters');
-var formElementDisabledSwitcher = function (form, boolean) {
+var map = document.querySelector('.map');
+var filterForm = map.querySelector('.map__filters');
+var mainPin = map.querySelector('.map__pin--main');
+var addInformationForm = document.querySelector('.ad-form');
+var formElementsDisabledSwitcher = function (form, boolean) {
   var elems = form.elements;
   for (var i = 0; i < elems.length; i++) {
     if (!boolean) {
@@ -62,5 +64,14 @@ var formElementDisabledSwitcher = function (form, boolean) {
     }
   }
 };
+formElementsDisabledSwitcher(filterForm, false);
+formElementsDisabledSwitcher(addInformationForm, false);
 
-formElementDisabledSwitcher(filterForm, false);
+mainPin.addEventListener('click', function () {
+  if (map.classList.contains('map--faded')) {
+    map.classList.remove('map--faded');
+    addInformationForm.classList.remove('ad-form--disabled');
+    formElementsDisabledSwitcher(filterForm, true);
+    formElementsDisabledSwitcher(addInformationForm, true);
+  }
+});
