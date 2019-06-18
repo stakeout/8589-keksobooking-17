@@ -5,27 +5,26 @@ var TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
 var getRandomInteger = function (min, max) {
-  var rand = min - 0.5 + Math.random() * (max - min + 1)
+  var rand = min - 0.5 + Math.random() * (max - min + 1);
   rand = Math.round(rand);
   return rand;
-}
+};
 
 var getArrayOfPinObjects = function (countOfArrays) {
   var pins = [];
   for (var i = 0; i < countOfArrays; i++) {
-    var pin = {
+    pins.push({
       'author': {
         'avatar': 'img/avatars/user0' + (i + 1) + '.png',
       },
       'offer': {
-        'type': getRandomInteger(0, TYPES.length)
+        'type': TYPES[getRandomInteger(0, TYPES.length - 1)]
       },
       'location': {
         'x': getRandomInteger(1, 1200),
         'y': getRandomInteger(130, 630)
       }
-    };
-    pins.push(pin);
+    });
   }
   return pins;
 };
