@@ -46,7 +46,21 @@ var renderAllPins = function (arrayOfPins) {
   }
 };
 
-renderAllPins(getArrayOfPinObjects(arrayCount));
+// renderAllPins(getArrayOfPinObjects(arrayCount));
 
 document.querySelector('.map').classList.remove('map--faded');
 
+// module4-task1
+var filterForm = document.querySelector('.map__filters');
+var formElementDisabledSwitcher = function (form, boolean) {
+  var elems = form.elements;
+  for (var i = 0; i < elems.length; i++) {
+    if (!boolean) {
+      elems[i].disabled = true;
+    } else {
+      elems[i].disabled = false;
+    }
+  }
+};
+
+formElementDisabledSwitcher(filterForm, false);
