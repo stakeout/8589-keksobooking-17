@@ -76,7 +76,7 @@ var setDefaultCoordsAddress = function () {
     y: Math.floor(mainPin.offsetTop + height / 2),
   };
 };
-addressField.value = setDefaultCoordsAddress().x + ', ' + setDefaultCoordsAddress().y;
+addressField.value = parseInt(setDefaultCoordsAddress().x) + ', ' + parseInt(setDefaultCoordsAddress().y);
 
 formElementsDisabledSwitcher(filterForm, false);
 formElementsDisabledSwitcher(noticeForm, false);
@@ -88,8 +88,6 @@ mainPin.addEventListener('click', function () {
     formElementsDisabledSwitcher(filterForm, true);
     formElementsDisabledSwitcher(noticeForm, true);
     renderAllPins(getArrayOfPinObjects(arrayCount));
-    addressField.disabled = true;
-
   }
 });
 // module4-task2
@@ -99,7 +97,7 @@ var getActiveSelectOptionText = function (selectElement) {
 var getActiveSelectOptionValue = function (selectElement) {
   return selectElement.options[selectElement.selectedIndex].value;
 };
-console.log(getActiveSelectOptionValue(timeIn));
+
 var setMinAttrAtPriceField = function (selectedHouseType) {
   switch (selectedHouseType) {
     case 'Бунгало':
