@@ -5,27 +5,26 @@ var TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
 var getRandomInteger = function (min, max) {
-  var rand = min - 0.5 + Math.random() * (max - min + 1)
+  var rand = min - 0.5 + Math.random() * (max - min + 1);
   rand = Math.round(rand);
   return rand;
-}
+};
 
 var getArrayOfPinObjects = function (countOfArrays) {
   var pins = [];
   for (var i = 0; i < countOfArrays; i++) {
-    var pin = {
+    pins.push({
       'author': {
         'avatar': 'img/avatars/user0' + (i + 1) + '.png',
       },
       'offer': {
-        'type': getRandomInteger(0, TYPES.length)
+        'type': TYPES[getRandomInteger(0, TYPES.length - 1)]
       },
       'location': {
         'x': getRandomInteger(1, 1200),
         'y': getRandomInteger(130, 630)
       }
-    };
-    pins.push(pin);
+    });
   }
   return pins;
 };
@@ -47,7 +46,41 @@ var renderAllPins = function (arrayOfPins) {
   }
 };
 
-renderAllPins(getArrayOfPinObjects(arrayCount));
+// module4-task1
+var map = document.querySelector('.map');
+var filterForm = map.querySelector('.map__filters');
+var mainPin = map.querySelector('.map__pin--main');
+var addInformationForm = document.querySelector('.ad-form');
+var addressField = document.querySelector('#address');
+var formElementsDisabledSwitcher = function (form, boolean) {
+  var elems = form.elements;
+  for (var i = 0; i < elems.length; i++) {
+    if (!boolean) {
+      elems[i].disabled = true;
+    } else {
+      elems[i].disabled = false;
+    }
+  }
+};
+var setDefaultCoordsAddress = function () {
+  var width = mainPin.getBoundingClientRect().width;
+  var height = mainPin.getBoundingClientRect().height;
+  return {
+    x: Math.floor(mainPin.offsetLeft + width / 2),
+    y: Math.floor(mainPin.offsetTop + height / 2),
+  };
+};
+addressField.value = setDefaultCoordsAddress().x + ', ' + setDefaultCoordsAddress().y;
 
-document.querySelector('.map').classList.remove('map--faded');
+formElementsDisabledSwitcher(filterForm, false);
+formElementsDisabledSwitcher(addInformationForm, false);
 
+mainPin.addEventListener('click', function () {
+  if (map.classList.contains('map--faded')) {
+    map.classList.remove('map--faded');
+    addInformationForm.classList.remove('ad-form--disabled');
+    formElementsDisabledSwitcher(filterForm, true);
+    formElementsDisabledSwitcher(addInformationForm, true);
+    renderAllPins(getArrayOfPinObjects(arrayCount));
+  }
+});
