@@ -50,8 +50,14 @@ var renderAllPins = function (arrayOfPins) {
 var map = document.querySelector('.map');
 var filterForm = map.querySelector('.map__filters');
 var mainPin = map.querySelector('.map__pin--main');
-var addInformationForm = document.querySelector('.ad-form');
-var addressField = document.querySelector('#address');
+var notice = document.querySelector('.notice');
+var noticeForm = notice.querySelector('.ad-form');
+var houseType = notice.querySelector('#type');
+var price = notice.querySelector('#price');
+var addressField = notice.querySelector('#address');
+var timeIn = notice.querySelector('#timein');
+var timeOut = notice.querySelector('#timeout');
+
 var formElementsDisabledSwitcher = function (form, boolean) {
   var elems = form.elements;
   for (var i = 0; i < elems.length; i++) {
@@ -73,14 +79,45 @@ var setDefaultCoordsAddress = function () {
 addressField.value = setDefaultCoordsAddress().x + ', ' + setDefaultCoordsAddress().y;
 
 formElementsDisabledSwitcher(filterForm, false);
-formElementsDisabledSwitcher(addInformationForm, false);
+formElementsDisabledSwitcher(noticeForm, false);
 
 mainPin.addEventListener('click', function () {
   if (map.classList.contains('map--faded')) {
     map.classList.remove('map--faded');
-    addInformationForm.classList.remove('ad-form--disabled');
+    noticeForm.classList.remove('ad-form--disabled');
     formElementsDisabledSwitcher(filterForm, true);
-    formElementsDisabledSwitcher(addInformationForm, true);
+    formElementsDisabledSwitcher(noticeForm, true);
     renderAllPins(getArrayOfPinObjects(arrayCount));
+    addressField.disabled = true;
+
   }
+});
+// module4-task2
+var getActiveSelectOptionText = function (selectElement) {
+  return selectElement.options[selectElement.selectedIndex].text;
+};
+
+var setMinAttrAtPriceField = function (selectedHouseType) {
+  switch (selectedHouseType) {
+    case 'Бунгало':
+      price.min = 0;
+      price.placeholder = 0;
+      break;
+    case 'Квартира':
+      price.min = 1000;
+      price.placeholder = 1000;
+      break;
+    case 'Дом':
+      price.min = 5000;
+      price.placeholder = 5000;
+      break;
+    case 'Дворец':
+      price.min = 10000;
+      price.placeholder = 10000;
+      break;
+  }
+};
+setMinAttrAtPriceField(getActiveSelectOptionText(houseType));
+houseType.addEventListener('change', function () {
+  setMinAttrAtPriceField(getActiveSelectOptionText(houseType));
 });
