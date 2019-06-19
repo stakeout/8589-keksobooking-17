@@ -96,7 +96,10 @@ mainPin.addEventListener('click', function () {
 var getActiveSelectOptionText = function (selectElement) {
   return selectElement.options[selectElement.selectedIndex].text;
 };
-
+var getActiveSelectOptionValue = function (selectElement) {
+  return selectElement.options[selectElement.selectedIndex].value;
+};
+console.log(getActiveSelectOptionValue(timeIn));
 var setMinAttrAtPriceField = function (selectedHouseType) {
   switch (selectedHouseType) {
     case 'Бунгало':
@@ -120,4 +123,10 @@ var setMinAttrAtPriceField = function (selectedHouseType) {
 setMinAttrAtPriceField(getActiveSelectOptionText(houseType));
 houseType.addEventListener('change', function () {
   setMinAttrAtPriceField(getActiveSelectOptionText(houseType));
+});
+timeIn.addEventListener('change', function () {
+  timeOut.value = timeIn.value;
+});
+timeOut.addEventListener('change', function () {
+  timeIn.value = timeOut.value;
 });
