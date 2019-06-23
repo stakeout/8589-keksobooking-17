@@ -58,13 +58,13 @@ var addressField = notice.querySelector('#address');
 var timeIn = notice.querySelector('#timein');
 var timeOut = notice.querySelector('#timeout');
 
-var formElementsDisabledSwitcher = function (form, boolean) {
+var formElementsDisabledSwitcher = function (form, isActive) {
   var elems = form.elements;
   for (var i = 0; i < elems.length; i++) {
-    if (!boolean) {
-      elems[i].disabled = true;
-    } else {
+    if (isActive) {
       elems[i].disabled = false;
+    } else {
+      elems[i].disabled = true;
     }
   }
 };
@@ -91,36 +91,50 @@ mainPin.addEventListener('click', function () {
   }
 });
 // module4-task2
-var getActiveSelectOptionText = function (selectElement) {
-  return selectElement.options[selectElement.selectedIndex].text;
-};
-var setMinAttrAtPriceField = function (selectedHouseType) {
-  switch (selectedHouseType) {
-    case 'Бунгало':
-      price.min = 0;
-      price.placeholder = 0;
-      break;
-    case 'Квартира':
-      price.min = 1000;
-      price.placeholder = 1000;
-      break;
-    case 'Дом':
-      price.min = 5000;
-      price.placeholder = 5000;
-      break;
-    case 'Дворец':
-      price.min = 10000;
-      price.placeholder = 10000;
-      break;
+var minPricesOfTypes = [
+  {
+    type: 'palace',
+    minprice: 10000
+  },
+  {
+    type: 'house',
+    minprice: 5000
+  },
+  {
+    type: 'flat',
+    minprice: 1000
+  },
+  {
+    type: 'bungalo',
+    minprice: 0
   }
+];
+
+var setDefaultPriceValue = function () {
+  minPricesOfTypes.forEach(function (item) {
+    if (houseType.value === item.type) {
+      price.min = item.minprice;
+      price.placeholder = item.minprice;
+    }
+  });
 };
-setMinAttrAtPriceField(getActiveSelectOptionText(houseType));
-houseType.addEventListener('change', function () {
-  setMinAttrAtPriceField(getActiveSelectOptionText(houseType));
-});
-timeIn.addEventListener('change', function () {
+setDefaultPriceValue();
+
+var houseTypeChangeHandler = function (evt) {
+  minPricesOfTypes.forEach(function (item) {
+    if (evt.target.value === item.type) {
+      price.min = item.minprice;
+      price.placeholder = item.minprice;
+    }
+  });
+};
+
+houseType.addEventListener('change', houseTypeChangeHandler);
+var timeInOnChangeHandler = function () {
   timeOut.value = timeIn.value;
-});
-timeOut.addEventListener('change', function () {
+};
+var timeOutOnChangeHandler = function () {
   timeIn.value = timeOut.value;
-});
+};
+timeIn.addEventListener('change', timeInOnChangeHandler);
+timeOut.addEventListener('change', timeOutOnChangeHandler);
