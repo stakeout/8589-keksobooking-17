@@ -76,7 +76,7 @@ var getMainPinLocation = function (isActive) {
     y: Math.floor(mainPin.offsetTop + mainPinHeight / 2)
   };
   if (isActive) { // когда активируем карту сдвигом, появляется острый конец и идет пересчет дефолтного Y
-    mainPinCoords.y = Math.floor((mainPin.offsetTop + mainPinHeight) + 22 - 6); // учтем что высота ::after 22px и сдвиг вверх -6px
+    mainPinCoords.y = Math.floor(mainPin.offsetTop + mainPinHeight);
   }
   return mainPinCoords;
 };
@@ -89,15 +89,6 @@ formElementsDisabledSwitcher(filterForm, false);
 formElementsDisabledSwitcher(noticeForm, false);
 setAddressValue(getMainPinLocation(false));
 
-mainPin.addEventListener('click', function () {
-  if (map.classList.contains('map--faded')) {
-    map.classList.remove('map--faded');
-    noticeForm.classList.remove('ad-form--disabled');
-    formElementsDisabledSwitcher(filterForm, true);
-    formElementsDisabledSwitcher(noticeForm, true);
-    renderAllPins(getArrayOfPinObjects(PINS_QUANTITY));
-  }
-});
 // module4-task2
 var minPricesOfTypes = [
   {
@@ -146,3 +137,51 @@ var timeOutOnChangeHandler = function () {
 };
 timeIn.addEventListener('change', timeInOnChangeHandler);
 timeOut.addEventListener('change', timeOutOnChangeHandler);
+// module 5
+mainPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+  switchPageToActiveState();
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+  var mouseMoveHandler = function (moveEvt) {
+    moveEvt.preventDefault();
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+    var mainPinCoords = getMainPinLocation(true);
+    if (mainPinCoords.y - shift.y >= Y_MIN && mainPinCoords.y - shift.y <= Y_MAX) {
+      mainPin.style.top = mainPin.offsetTop - shift.y + 'px';
+    }
+    if (mainPinCoords.x - shift.x >= 0 && mainPinCoords.x - shift.x <= pinsContainer.clientWidth) {
+      mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+    }
+    setAddressValue(getMainPinLocation(true));
+  };
+  var mouseUpHandler = function (upEvt) {
+    upEvt.preventDefault();
+    switchPageToActiveState();
+    setAddressValue(getMainPinLocation(true));
+    document.removeEventListener('mousemove', mouseMoveHandler);
+    document.removeEventListener('mouseup', mouseUpHandler);
+  };
+  document.addEventListener('mousemove', mouseMoveHandler);
+  document.addEventListener('mouseup', mouseUpHandler);
+});
+
+var switchPageToActiveState = function () {
+  if (map.classList.contains('map--faded')) {
+    map.classList.remove('map--faded');
+    noticeForm.classList.remove('ad-form--disabled');
+    formElementsDisabledSwitcher(filterForm, true);
+    formElementsDisabledSwitcher(noticeForm, true);
+    renderAllPins(getArrayOfPinObjects(PINS_QUANTITY));
+  }
+};
+
