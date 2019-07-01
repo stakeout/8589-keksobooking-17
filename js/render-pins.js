@@ -2,8 +2,10 @@
 
 (function () {
   var PINS_QUANTITY = 8;
+  var Y_MIN = 130;
+  var Y_MAX = 630;
   var TYPES = ['palace', 'flat', 'house', 'bungalo'];
-  var map = window.util.map;
+  var map = document.querySelector('.map');
   var pinsContainer = map.querySelector('.map__pins');
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
@@ -18,33 +20,31 @@
     pinElement.querySelector('img').alt = '';
     return pinElement;
   };
-  window.renderPins = {
-    PINS_QUANTITY: PINS_QUANTITY,
-    map: map,
-    pinsContainer: pinsContainer,
-    getArrayOfPinObjects: function (countOfArrays) {
-      var pins = [];
-      for (var i = 0; i < countOfArrays; i++) {
-        pins.push({
-          'author': {
-            'avatar': 'img/avatars/user0' + (i + 1) + '.png',
-          },
-          'offer': {
-            'type': TYPES[getRandomInteger(0, TYPES.length - 1)]
-          },
-          'location': {
-            'x': getRandomInteger(0, pinsContainer.clientWidth),
-            'y': getRandomInteger(window.util.Y_MIN, window.util.Y_MAX)
-          }
-        });
-      }
-      return pins;
-    },
-    renderAllPins: function (arrayOfPins) {
-      var fragment = document.createDocumentFragment();
-      for (var i = 0; i < arrayOfPins.length; i++) {
-        pinsContainer.appendChild(fragment.appendChild(setPinInfo(arrayOfPins[i])));
-      }
+  var getArrayOfPinObjects = function (countOfArrays) {
+    var pins = [];
+    for (var i = 0; i < countOfArrays; i++) {
+      pins.push({
+        'author': {
+          'avatar': 'img/avatars/user0' + (i + 1) + '.png',
+        },
+        'offer': {
+          'type': TYPES[getRandomInteger(0, TYPES.length - 1)]
+        },
+        'location': {
+          'x': getRandomInteger(0, pinsContainer.clientWidth),
+          'y': getRandomInteger(Y_MIN, Y_MAX)
+        }
+      });
     }
+    return pins;
+  };
+  var renderAllPins  = function (arrayOfPins) {
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < arrayOfPins.length; i++) {
+      pinsContainer.appendChild(fragment.appendChild(setPinInfo(arrayOfPins[i])));
+    }
+  };
+  window.renderPins = function () {
+    renderAllPins(getArrayOfPinObjects(PINS_QUANTITY));
   };
 })();
