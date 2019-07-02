@@ -7,12 +7,14 @@
     WIDTH: 50,
     HEIGHT: 70
   };
+  var mainTag = document.querySelector('main');
   var map = document.querySelector('.map');
   var mapContainer = map.querySelector('.map__pins');
   var mainPin = map.querySelector('.map__pin--main');
   var filterForm = map.querySelector('.map__filters');
   var notice = document.querySelector('.notice');
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+  var ajaxErrorTemplate = document.querySelector('#error').content.querySelector('.error');
 
   window.util.formElementsDisabledSwitcher(filterForm, false);
   var noticeForm = notice.querySelector('.ad-form');
@@ -27,7 +29,10 @@
     return pinElement;
   };
   var errorHandler = function (errorMessage) {
-    console.log('some error');
+    var errorContainer = ajaxErrorTemplate.cloneNode(true);
+    errorContainer.querySelector('.error__message').textContent = errorMessage;
+    mainTag.insertBefore(errorContainer, null);
+
   };
   var successHandler = function (arrayOfPins) {
     var fragment = document.createDocumentFragment();
