@@ -13,12 +13,12 @@
   var mainPin = map.querySelector('.map__pin--main');
   var filterForm = map.querySelector('.map__filters');
   var notice = document.querySelector('.notice');
+  var noticeForm = notice.querySelector('.ad-form');
+  var addressField = noticeForm.querySelector('#address');
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var ajaxErrorTemplate = document.querySelector('#error').content.querySelector('.error');
 
   window.util.formElementsDisabledSwitcher(filterForm, false);
-  var noticeForm = notice.querySelector('.ad-form');
-  var addressField = noticeForm.querySelector('#address');
 
   var setPinInfo = function (pin) {
     var pinElement = pinTemplate.cloneNode(true);
@@ -28,11 +28,32 @@
     pinElement.querySelector('img').alt = pin.offer.title;
     return pinElement;
   };
-  var errorHandler = function (errorMessage) {
+  var errorOverlayEscHandler = function (evt) {
+    window.util.isEscEvent(evt, closeErrorOverlay);
+  };
+  var errorOverlayClickHandler = function () {
+    var overlay = document.querySelector('.error');
+    if (overlay) {
+      closeErrorOverlay();
+    }
+  };
+  var openErrorOverlay = function (text) {
     var errorContainer = ajaxErrorTemplate.cloneNode(true);
-    errorContainer.querySelector('.error__message').textContent = errorMessage;
+    errorContainer.querySelector('.error__message').textContent = text;
     mainTag.insertBefore(errorContainer, null);
+    document.addEventListener('keydown', errorOverlayEscHandler);
+    document.addEventListener('click', errorOverlayClickHandler);
 
+  };
+  var closeErrorOverlay = function () {
+    var overlay = document.querySelector('.error');
+    document.removeEventListener('keydown', errorOverlayEscHandler);
+    document.removeEventListener('click', errorOverlayClickHandler);
+    mainTag.removeChild(overlay);
+    switchPageToActiveState(false);
+  };
+  var errorHandler = function (errorMessage) {
+    openErrorOverlay(errorMessage);
   };
   var successHandler = function (arrayOfPins) {
     var fragment = document.createDocumentFragment();
@@ -40,7 +61,6 @@
       mapContainer.appendChild(fragment.appendChild(setPinInfo(arrayOfPins[i])));
     }
   };
-
   var getMainPinLocation = function (isActive) {
     var mainPinWidth = mainPin.getBoundingClientRect().width;
     var mainPinHeight = mainPin.getBoundingClientRect().height;
@@ -53,13 +73,18 @@
     }
     return mainPinCoords;
   };
-  var switchPageToActiveState = function () {
-    if (map.classList.contains('map--faded')) {
-      map.classList.remove('map--faded');
-      noticeForm.classList.remove('ad-form--disabled');
+  var switchPageToActiveState = function (isActive) {
+    if (isActive) {
+      map.classList.toggle('map--faded');
+      noticeForm.classList.toggle('ad-form--disabled');
       window.util.formElementsDisabledSwitcher(filterForm, true);
       window.util.formElementsDisabledSwitcher(noticeForm, true);
       window.data.load(successHandler, errorHandler);
+    } else {
+      map.classList.toggle('map--faded');
+      noticeForm.classList.toggle('ad-form--disabled');
+      window.util.formElementsDisabledSwitcher(filterForm, false);
+      window.util.formElementsDisabledSwitcher(noticeForm, false);
     }
   };
   var setAddressValue = function (mainPinCoords) {
@@ -68,7 +93,6 @@
   setAddressValue(getMainPinLocation(false));
   mainPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
-    switchPageToActiveState();
     var startCoords = {
       x: evt.clientX,
       y: evt.clientY
@@ -94,7 +118,7 @@
     };
     var mouseUpHandler = function (upEvt) {
       upEvt.preventDefault();
-      switchPageToActiveState();
+      switchPageToActiveState(true);
       setAddressValue(getMainPinLocation(true));
       document.removeEventListener('mousemove', mouseMoveHandler);
       document.removeEventListener('mouseup', mouseUpHandler);
