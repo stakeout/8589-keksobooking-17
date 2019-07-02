@@ -1,11 +1,10 @@
 'use strict';
 
 (function () {
-  var notice = window.util.notice;
+  var notice = document.querySelector('.notice');
   var noticeForm = notice.querySelector('.ad-form');
   var houseType = notice.querySelector('#type');
   var price = notice.querySelector('#price');
-  var addressField = notice.querySelector('#address');
   var timeIn = notice.querySelector('#timein');
   var timeOut = notice.querySelector('#timeout');
   window.util.formElementsDisabledSwitcher(noticeForm, false);
@@ -53,8 +52,4 @@
   };
   timeIn.addEventListener('change', timeInOnChangeHandler);
   timeOut.addEventListener('change', timeOutOnChangeHandler);
-  window.notice = {
-    noticeForm: noticeForm,
-    addressField: addressField
-  };
 })();
