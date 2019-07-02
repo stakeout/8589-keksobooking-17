@@ -7,7 +7,6 @@
 
     xhr.addEventListener('load', function () {
       if (xhr.readyState === 4 && xhr.status === 200) {
-        console.log(xhr.response);
         successHandler(xhr.response);
       } else {
         errorHandler('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
