@@ -3,16 +3,15 @@
 (function () {
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
-  var formElementsDisabledSwitcher = function (form, isActive) {
-    var elems = form.elements;
-    for (var i = 0; i < elems.length; i++) {
-      if (isActive) {
-        elems[i].disabled = false;
-      } else {
-        elems[i].disabled = true;
-      }
-    }
+  var formsActivitySwitcher = function (isActive) {
+    var forms = document.querySelectorAll('form');
+    forms.forEach(function (form) {
+      Array.from(form.elements).forEach(function (elem) {
+        elem.disabled = isActive ? false : true;
+      });
+    });
   };
+  formsActivitySwitcher(false);
   window.util = {
     isEscEvent: function (evt, action) {
       if (evt.keyCode === ESC_KEYCODE) {
@@ -24,7 +23,7 @@
         action();
       }
     },
-    formElementsDisabledSwitcher: formElementsDisabledSwitcher
+    formsActivitySwitcher: formsActivitySwitcher
   };
 })();
 

@@ -2,12 +2,12 @@
 
 (function () {
   var notice = document.querySelector('.notice');
-  var noticeForm = notice.querySelector('.ad-form');
+  // var noticeForm = notice.querySelector('.ad-form');
   var houseType = notice.querySelector('#type');
   var price = notice.querySelector('#price');
   var timeIn = notice.querySelector('#timein');
   var timeOut = notice.querySelector('#timeout');
-  window.util.formElementsDisabledSwitcher(noticeForm, false);
+
   var minPricesOfTypes = [
     {
       type: 'palace',
