@@ -22,7 +22,8 @@
     xhr.open('GET', URL);
     xhr.send();
   };
+
   window.data = {
-    load: load
+    load: load,
   };
 })();

@@ -6,13 +6,11 @@
     HEIGHT: 70
   };
   var mainTag = document.querySelector('main');
-  var map = document.querySelector('.map');
+  var map = mainTag.querySelector('.map');
   var mapContainer = map.querySelector('.map__pins');
-  var pins = map.querySelector('.map__pins');
+  var noticeForm = mainTag.querySelector('.ad-form');
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var ajaxErrorTemplate = document.querySelector('#error').content.querySelector('.error');
-  var pinElements = [];
-  var noticeForm = mainTag.querySelector('.ad-form');
 
   var setPinInfo = function (pin) {
     var pinElement = pinTemplate.cloneNode(true);
@@ -49,12 +47,27 @@
   var errorHandler = function (errorMessage) {
     openErrorOverlay(errorMessage);
   };
-  var successHandler = function (arrayOfPins) {
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < arrayOfPins.length; i++) {
-      mapContainer.appendChild(fragment.appendChild(setPinInfo(arrayOfPins[i])));
+  var saveDataToStorage = function (ajaxData) {
+    try {
+      localStorage.setItem('pinsData', JSON.stringify(ajaxData));
+    } catch (evt) {
+      if (evt === 'QUOTA_EXCEEDED_ERR') {
+        openErrorOverlay('Превышен лимит localstorage');
+      }
     }
   };
+  var render = function (data) {
+    var fragment = document.createDocumentFragment();
+    data.forEach(function (elem) {
+      fragment.appendChild(setPinInfo(elem));
+    });
+    mapContainer.appendChild(fragment);
+  };
+  var successHandler = function (ajaxData) {
+    saveDataToStorage(ajaxData);
+    render(ajaxData);
+  };
+
   var activateMap = function () {
     map.classList.remove('map--faded');
     noticeForm.classList.remove('ad-form--disabled');
@@ -66,15 +79,11 @@
     map.classList.add('map--faded');
     noticeForm.classList.add('ad-form--disabled');
     window.util.formsActivitySwitcher(false);
-    pinElements.forEach(function (element) {
-      pins.removeChild(element);
-    });
-
-    pinElements = [];
   };
 
   window.map = {
     deactivateMap: deactivateMap,
-    activateMap: activateMap
+    activateMap: activateMap,
+    render: render
   };
 })();

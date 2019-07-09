@@ -67,7 +67,9 @@
       document.addEventListener('mouseup', mouseUpHandler);
     });
   };
+
   initPage();
+
   window.mainPin = {
     getMainPinLocation: getMainPinLocation
   };
