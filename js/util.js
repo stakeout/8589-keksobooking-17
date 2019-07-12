@@ -3,6 +3,7 @@
 (function () {
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
+  var DEBOUNCE_INTERVAL = 500
   var formsActivitySwitcher = function (isActive) {
     var forms = document.querySelectorAll('form');
     forms.forEach(function (form) {
@@ -10,6 +11,19 @@
         elem.disabled = isActive ? false : true;
       });
     });
+  };
+  var debounce = function (callback) {
+    var lastTimeout = null;
+
+    return function () {
+      var args = arguments;
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(function () {
+        callback.apply(null, args);
+      }, DEBOUNCE_INTERVAL);
+    };
   };
   formsActivitySwitcher(false);
   window.util = {
@@ -23,7 +37,8 @@
         action();
       }
     },
-    formsActivitySwitcher: formsActivitySwitcher
+    formsActivitySwitcher: formsActivitySwitcher,
+    debounce: debounce
   };
 })();
 

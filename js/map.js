@@ -47,15 +47,6 @@
   var errorHandler = function (errorMessage) {
     openErrorOverlay(errorMessage);
   };
-  var saveDataToStorage = function (ajaxData) {
-    try {
-      localStorage.setItem('pinsData', JSON.stringify(ajaxData));
-    } catch (evt) {
-      if (evt === 'QUOTA_EXCEEDED_ERR') {
-        openErrorOverlay('Превышен лимит localstorage');
-      }
-    }
-  };
   var render = function (data) {
     var fragment = document.createDocumentFragment();
     data.forEach(function (elem) {
@@ -64,8 +55,7 @@
     mapContainer.appendChild(fragment);
   };
   var successHandler = function (ajaxData) {
-    saveDataToStorage(ajaxData);
-    render(ajaxData);
+    render(window.filters.activate(ajaxData));
   };
 
   var activateMap = function () {
