@@ -77,12 +77,12 @@
       mainPin.addEventListener('mousedown', onMouseDown);
       function onStartApp() {
         mainPin.removeEventListener('mouseup', onStartApp);
-        mainPin.removeEventListener('keydown', onPinInitEnterPress)
+        mainPin.removeEventListener('keydown', onPinInitEnterPress);
         cb();
       }
       mainPin.addEventListener('mouseup', onStartApp);
       var onPinInitEnterPress = window.util.isEnterPress(onStartApp);
-      mainPin.addEventListener('keydown', onPinInitEnterPress)
+      mainPin.addEventListener('keydown', onPinInitEnterPress);
     }
   };
 })();
