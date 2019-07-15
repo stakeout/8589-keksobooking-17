@@ -490,6 +490,20 @@ fieldset {
   font-weight: 700;
 }
 
+.errorbox {
+  position: relative;
+  width: 90%;
+}
+
+.errorbox__paragraph {
+  position: absolute;
+  width: 100%;
+  border: 2px solid blue;
+  color: blue;
+  padding: 10px;
+  background-color: #fff;
+}
+
 .ad-form {
   display: -webkit-box;
   display: -ms-flexbox;
