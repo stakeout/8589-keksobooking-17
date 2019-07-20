@@ -9,7 +9,7 @@
 
   var pinAdTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var cardAdTemplate = document.querySelector('#card').content.querySelector('.map__card');
-  var mapBlock = document.querySelector('.map');
+  var mapBlockElement = document.querySelector('.map');
 
   var adCurrent = null;
   var pinActive = null;
@@ -56,7 +56,7 @@
       }
       pinActive = pinElement;
       pinActive.classList.add('map__pin--active');
-      mapBlock.lastElementChild.insertAdjacentElement('beforeBegin', adCurrent);
+      mapBlockElement.lastElementChild.insertAdjacentElement('beforeBegin', adCurrent);
 
       var adClose = adCurrent.querySelector('.popup__close');
 
@@ -86,22 +86,22 @@
     cardAdElement.querySelector('.popup__description').textContent = adObject.offer.description;
 
     var features = cardAdElement.querySelector('.popup__features');
-    var feature = features.querySelector('.popup__feature');
+    var featureTemplate = features.querySelector('.popup__feature');
     features.innerHTML = '';
     adObject.offer.features.forEach(function (item) {
-      var featureNew = feature.cloneNode();
-      featureNew.className = '';
-      featureNew.classList.add('popup__feature', 'popup__feature--' + item);
-      features.appendChild(featureNew);
+      var featureNewElement = featureTemplate.cloneNode();
+      featureNewElement.className = '';
+      featureNewElement.classList.add('popup__feature', 'popup__feature--' + item);
+      features.appendChild(featureNewElement);
     });
 
     var photos = cardAdElement.querySelector('.popup__photos');
-    var photoImg = photos.querySelector('.popup__photo');
+    var photoImgTemplate = photos.querySelector('.popup__photo');
     photos.innerHTML = '';
     adObject.offer.photos.forEach(function (src) {
-      var photo = photoImg.cloneNode(true);
-      photo.src = src;
-      photos.appendChild(photo);
+      var photoElement = photoImgTemplate.cloneNode(true);
+      photoElement.src = src;
+      photos.appendChild(photoElement);
     });
 
     cardAdElement.querySelector('.popup__avatar').src = adObject.author.avatar;

@@ -5,21 +5,21 @@
     MAX: 630
   };
 
-  var mapBlock = document.querySelector('.map');
-  var pinBox = mapBlock.querySelector('.map__pins');
-  var mainPin = pinBox.querySelector('.map__pin--main');
+  var mapBlockElement = document.querySelector('.map');
+  var pinBoxElement = mapBlockElement.querySelector('.map__pins');
+  var mainPinElement = pinBoxElement.querySelector('.map__pin--main');
 
-  var mainPinWidth = mainPin.getBoundingClientRect().width;
-  var mainPinHeight = mainPin.getBoundingClientRect().height;
+  var mainPinWidth = mainPinElement.getBoundingClientRect().width;
+  var mainPinHeight = mainPinElement.getBoundingClientRect().height;
 
   function getCoordinates() {
     var pinMoveEvent = new Event('pinMoveEvent', {bubbles: true, cancelable: true});
     pinMoveEvent.coords = {
-      x: mainPin.offsetLeft + mainPinWidth / 2,
-      y: mainPin.offsetTop + mainPinHeight
+      x: mainPinElement.offsetLeft + mainPinWidth / 2,
+      y: mainPinElement.offsetTop + mainPinHeight
     };
-    if (mapBlock.classList.contains('map--faded')) {
-      pinMoveEvent.coords.y = mainPin.offsetTop + mainPinHeight / 2;
+    if (mapBlockElement.classList.contains('map--faded')) {
+      pinMoveEvent.coords.y = mainPinElement.offsetTop + mainPinHeight / 2;
     }
     document.dispatchEvent(pinMoveEvent);
   }
@@ -46,19 +46,19 @@
         y: moveEvt.clientY
       };
 
-      var pinLeft = mainPin.offsetLeft - shift.x;
+      var pinLeft = mainPinElement.offsetLeft - shift.x;
 
-      var pinTop = mainPin.offsetTop - shift.y;
+      var pinTop = mainPinElement.offsetTop - shift.y;
 
-      if (pinLeft < pinBox.offsetLeft - mainPinWidth / 2 || pinLeft > pinBox.offsetWidth - mainPinWidth / 2) {
+      if (pinLeft < pinBoxElement.offsetLeft - mainPinWidth / 2 || pinLeft > pinBoxElement.offsetWidth - mainPinWidth / 2) {
         return;
       }
       if (pinTop < Ordinate.MIN || pinTop > Ordinate.MAX) {
         return;
       }
 
-      mainPin.style.left = pinLeft + 'px';
-      mainPin.style.top = pinTop + 'px';
+      mainPinElement.style.left = pinLeft + 'px';
+      mainPinElement.style.top = pinTop + 'px';
     }
 
     // при отпускании мыши перестаем слушать событие движения мыши
@@ -74,15 +74,15 @@
 
   window.pin = {
     init: function (cb) {
-      mainPin.addEventListener('mousedown', onMouseDown);
+      mainPinElement.addEventListener('mousedown', onMouseDown);
       function onStartApp() {
-        mainPin.removeEventListener('mouseup', onStartApp);
-        mainPin.removeEventListener('keydown', onPinInitEnterPress);
+        mainPinElement.removeEventListener('mouseup', onStartApp);
+        mainPinElement.removeEventListener('keydown', onPinInitEnterPress);
         cb();
       }
-      mainPin.addEventListener('mouseup', onStartApp);
+      mainPinElement.addEventListener('mouseup', onStartApp);
       var onPinInitEnterPress = window.util.isEnterPress(onStartApp);
-      mainPin.addEventListener('keydown', onPinInitEnterPress);
+      mainPinElement.addEventListener('keydown', onPinInitEnterPress);
     }
   };
 })();

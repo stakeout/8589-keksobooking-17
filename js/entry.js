@@ -2,7 +2,7 @@
 (function () {
   function onPageStart() {
     window.pin.init(function () {
-      var pinBox = document.querySelector('.map__pins');
+      var pinBoxElement = document.querySelector('.map__pins');
       window.form.enableAdForm();
       window.filter.enableFilterForm();
       window.ajax({
@@ -12,16 +12,16 @@
           window.data.set(data);
 
           var pins = window.data.get().slice(0, 5);
-          window.map.renderElements(pins, pinBox, window.ad.createAdPin);
+          window.map.renderElements(pins, pinBoxElement, window.ad.createAdPin);
         },
         sendError: function (errorMessage) {
-          var main = document.querySelector('main');
+          var mainElement = document.querySelector('main');
           var errorBlock = document.createElement('div');
           errorBlock.classList.add('error-block');
           errorBlock.style.border = '2px solid red';
           errorBlock.style.textAlign = 'center';
           errorBlock.textContent = errorMessage;
-          main.insertAdjacentElement('afterbegin', errorBlock);
+          mainElement.insertAdjacentElement('afterbegin', errorBlock);
         }
       });
     });

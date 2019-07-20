@@ -5,9 +5,9 @@
     PRICE_MAX: 50000
   };
 
-  var mapBlock = document.querySelector('.map');
-  var filtersForm = mapBlock.querySelector('.map__filters');
-  var filterFormElements = Array.from(filtersForm.elements);
+  var mapBlockElement = document.querySelector('.map');
+  var filtersFormElement = mapBlockElement.querySelector('.map__filters');
+  var filterFormElements = Array.from(filtersFormElement.elements);
 
   var filterCriteria = {
     housingType: 'any',
@@ -18,23 +18,23 @@
 
   function changeConditionFilterForm() {
     filterFormElements.forEach(function (filterFormElement) {
-      filterFormElement.disabled = mapBlock.classList.contains('map--faded') ? true : false;
+      filterFormElement.disabled = mapBlockElement.classList.contains('map--faded') ? true : false;
     });
   }
 
   changeConditionFilterForm();
 
   function addEventFilterForm() {
-    mapBlock.classList.remove('map--faded');
+    mapBlockElement.classList.remove('map--faded');
     changeConditionFilterForm();
-    filtersForm.addEventListener('change', onChangeFilter);
+    filtersFormElement.addEventListener('change', onChangeFilter);
   }
 
   function removeEventFilterForm() {
-    filtersForm.reset();
-    mapBlock.classList.add('map--faded');
+    filtersFormElement.reset();
+    mapBlockElement.classList.add('map--faded');
     changeConditionFilterForm();
-    filtersForm.removeEventListener('change', onChangeFilter);
+    filtersFormElement.removeEventListener('change', onChangeFilter);
   }
 
   function updateHousingTypeFilter(value) {
@@ -137,7 +137,7 @@
   function onChangeFilter(evt) {
     evt.preventDefault();
     var pins = window.data.get();
-    var pinBox = document.querySelector('.map__pins');
+    var pinBoxElement = document.querySelector('.map__pins');
     var value = isNaN(evt.target.value) ? evt.target.value : parseInt(evt.target.value, 10);
 
     if (evt.target.name === 'housing-type') {
@@ -165,7 +165,7 @@
     }).slice(0, 5);
 
     window.map.clearMap();
-    window.debounce(window.map.renderElements)(filteredPins, pinBox, window.ad.createAdPin);
+    window.debounce(window.map.renderElements)(filteredPins, pinBoxElement, window.ad.createAdPin);
 
   }
 
