@@ -22,13 +22,7 @@
     };
   }
 
-  // Функция генерации случайного целого числа
-  var getRandomNumber = function (min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
-  };
-
   window.util = {
-    getRandomNumber: getRandomNumber,
     isEscPress: isEscPress,
     isEnterPress: isEnterPress
   };

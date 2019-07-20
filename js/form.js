@@ -9,17 +9,17 @@
     TOP: 375
   };
 
-  var main = document.querySelector('main');
-  var mainPin = main.querySelector('.map__pin--main');
-  var form = main.querySelector('.ad-form');
-  var adFormElements = Array.from(form.elements);
-  var timeIn = form.querySelector('#timein');
-  var timeOut = form.querySelector('#timeout');
+  var mainElement = document.querySelector('main');
+  var mainPinElement = mainElement.querySelector('.map__pin--main');
+  var formElement = mainElement.querySelector('.ad-form');
+  var adFormElements = Array.from(formElement.elements);
+  var timeInElement = formElement.querySelector('#timein');
+  var timeOutElement = formElement.querySelector('#timeout');
 
-  var roomNumber = form.querySelector('#room_number');
-  var guestNumber = form.querySelector('#capacity');
+  var roomNumberElement = formElement.querySelector('#room_number');
+  var guestNumberElement = formElement.querySelector('#capacity');
 
-  var typeHousing = form.querySelector('#type');
+  var typeHousingElement = formElement.querySelector('#type');
 
   var typeHousingMap = {
     'bungalo': {
@@ -49,7 +49,7 @@
 
   function changeConditionAdForm() {
     adFormElements.forEach(function (adFormElement) {
-      adFormElement.disabled = form.classList.contains('ad-form--disabled') ? true : false;
+      adFormElement.disabled = formElement.classList.contains('ad-form--disabled') ? true : false;
     });
   }
 
@@ -57,47 +57,47 @@
 
   function getMainPinStartCoordinates() {
     var mainPinStartCoords = {
-      x: parseInt(mainPin.style.left, 10) + mainPin.getBoundingClientRect().width / 2,
-      y: parseInt(mainPin.style.top, 10) + mainPin.getBoundingClientRect().height / 2
+      x: parseInt(mainPinElement.style.left, 10) + mainPinElement.getBoundingClientRect().width / 2,
+      y: parseInt(mainPinElement.style.top, 10) + mainPinElement.getBoundingClientRect().height / 2
     };
 
-    form.address.value = mainPinStartCoords.x + ', ' + mainPinStartCoords.y;
+    formElement.address.value = mainPinStartCoords.x + ', ' + mainPinStartCoords.y;
   }
 
   getMainPinStartCoordinates();
 
   function addEventAdForm() {
-    form.classList.remove('ad-form--disabled');
+    formElement.classList.remove('ad-form--disabled');
     changeConditionAdForm();
-    roomNumber.addEventListener('change', onChangeRooms);
-    typeHousing.addEventListener('change', onChangeType);
-    timeIn.addEventListener('change', onChangeTimeIn);
-    timeOut.addEventListener('change', onChangeTimeOut);
-    form.addEventListener('reset', onResetForm);
-    form.addEventListener('submit', onSubmitForm);
+    roomNumberElement.addEventListener('change', onChangeRooms);
+    typeHousingElement.addEventListener('change', onChangeType);
+    timeInElement.addEventListener('change', onChangeTimeIn);
+    timeOutElement.addEventListener('change', onChangeTimeOut);
+    formElement.addEventListener('reset', onResetForm);
+    formElement.addEventListener('submit', onSubmitForm);
     document.addEventListener('pinMoveEvent', onPinMoveEventAddressField);
   }
 
   function removeEventAdForm() {
-    form.classList.add('ad-form--disabled');
+    formElement.classList.add('ad-form--disabled');
     changeConditionAdForm();
-    roomNumber.removeEventListener('change', onChangeRooms);
-    typeHousing.removeEventListener('change', onChangeType);
-    timeIn.removeEventListener('change', onChangeTimeIn);
-    timeOut.removeEventListener('change', onChangeTimeOut);
-    form.removeEventListener('reset', onResetForm);
-    form.removeEventListener('submit', onSubmitForm);
+    roomNumberElement.removeEventListener('change', onChangeRooms);
+    typeHousingElement.removeEventListener('change', onChangeType);
+    timeInElement.removeEventListener('change', onChangeTimeIn);
+    timeOutElement.removeEventListener('change', onChangeTimeOut);
+    formElement.removeEventListener('reset', onResetForm);
+    formElement.removeEventListener('submit', onSubmitForm);
     document.addEventListener('pinMoveEvent', onPinMoveEventAddressField);
   }
 
   function changeRoomNumberValue(value) {
-    Array.from(guestNumber.options).forEach(function (option) {
+    Array.from(guestNumberElement.options).forEach(function (option) {
       option.disabled = !roomForGuestsMap[value].includes(option.value);
     });
-    guestNumber.value = value > 3 ? '0' : value;
+    guestNumberElement.value = value > 3 ? '0' : value;
   }
 
-  changeRoomNumberValue(roomNumber.value);
+  changeRoomNumberValue(roomNumberElement.value);
 
   function onChangeRooms(evt) {
     changeRoomNumberValue(evt.currentTarget.value);
@@ -137,21 +137,21 @@
   }
 
   function onChangeType(evt) {
-    form.price.placeholder = typeHousingMap[evt.currentTarget.value].min;
+    formElement.price.placeholder = typeHousingMap[evt.currentTarget.value].min;
   }
 
   function onChangeTimeIn(evt) {
     var timeInCurrentValue = evt.currentTarget.value;
-    timeOut.value = timeInCurrentValue;
+    timeOutElement.value = timeInCurrentValue;
   }
 
   function onChangeTimeOut(evt) {
     var timeOutCurrentValue = evt.currentTarget.value;
-    timeIn.value = timeOutCurrentValue;
+    timeInElement.value = timeOutCurrentValue;
   }
 
   function onPinMoveEventAddressField(evt) {
-    form.address.value = evt.coords.x + ', ' + evt.coords.y;
+    formElement.address.value = evt.coords.x + ', ' + evt.coords.y;
   }
 
   document.addEventListener('pinMoveEvent', onPinMoveEventAddressField);
@@ -164,19 +164,19 @@
   }
 
   function changePage() {
-    form.reset();
+    formElement.reset();
     window.map.clearMap();
     removeEventAdForm();
     window.filter.disableFilterForm();
-    mainPin.style.left = Coordinate.LEFT + 'px';
-    mainPin.style.top = Coordinate.TOP + 'px';
+    mainPinElement.style.left = Coordinate.LEFT + 'px';
+    mainPinElement.style.top = Coordinate.TOP + 'px';
     getMainPinStartCoordinates();
     window.pin.init(function () {
-      var pinBox = document.querySelector('.map__pins');
+      var pinBoxElement = document.querySelector('.map__pins');
       addEventAdForm();
       window.filter.enableFilterForm();
       var pins = window.data.get().slice(0, 5);
-      window.map.renderElements(pins, pinBox, window.ad.createAdPin);
+      window.map.renderElements(pins, pinBoxElement, window.ad.createAdPin);
     });
   }
 
@@ -187,25 +187,25 @@
   function onSubmitForm(evt) {
     evt.preventDefault();
 
-    if (form.title) {
-      var strLength = form.title.value.length;
+    if (formElement.title) {
+      var strLength = formElement.title.value.length;
       if (strLength < TitleLength.LENGTH_MIN || strLength > TitleLength.LENGTH_MAX) {
         valid = false;
-        changeInputStyle(form.title);
-        renderError(form.title, 'Количество символов в заголовке объявления не должно быть меньше 30 и больше 100');
+        changeInputStyle(formElement.title);
+        renderError(formElement.title, 'Количество символов в заголовке объявления не должно быть меньше 30 и больше 100');
         return;
       } else {
         valid = true;
       }
     }
 
-    if (form.price) {
+    if (formElement.price) {
       for (var i = 0; i < housingTypes.length; i++) {
-        if (typeHousing.value === housingTypes[i]) {
-          if (form.price.value < typeHousingMap[housingTypes[i]].min || form.price.value > typeHousingMap[housingTypes[i]].max) {
+        if (typeHousingElement.value === housingTypes[i]) {
+          if (formElement.price.value < typeHousingMap[housingTypes[i]].min || formElement.price.value > typeHousingMap[housingTypes[i]].max) {
             valid = false;
-            changeInputStyle(form.price);
-            renderError(form.price, 'Цена не может быть ниже указанного значения или выше 1000000');
+            changeInputStyle(formElement.price);
+            renderError(formElement.price, 'Цена не может быть ниже указанного значения или выше 1000000');
             return;
           } else {
             valid = true;
@@ -215,7 +215,7 @@
     }
 
     if (valid) {
-      var formNew = new FormData(form);
+      var formNew = new FormData(formElement);
       window.ajax({
         method: 'POST',
         url: 'https://js.dump.academy/keksobooking',
